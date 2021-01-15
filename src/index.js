@@ -38,7 +38,6 @@ const collectionDiv = document.querySelector('#toy-collection')
 function renderToy(toyObj) {
   const toyDiv = document.createElement('div')
   toyDiv.classList.add('card')
-  // toyDiv.dataset.id = toyObj.id
   collectionDiv.append(toyDiv)
 
   const toyName = document.createElement('h2')
@@ -52,7 +51,9 @@ function renderToy(toyObj) {
 
   const toyLikes = document.createElement('p')
   toyLikes.classList.add('toy-likes')
+  toyLikes.dataset.likes = toyObj.likes
   toyLikes.innerText = toyObj.likes
+
 
   const likeBtn = document.createElement('button')
   likeBtn.classList.add('like-btn')
@@ -112,6 +113,7 @@ collectionDiv.addEventListener('click', function(event) {
 
 
 function increaseLikes(event) {
+  // console.log(event.target)
   if (event.target.matches('.like-btn')){
     // console.log(event.target)
     // find current like value
@@ -124,8 +126,24 @@ function increaseLikes(event) {
 
     // add new value to DOM
     pTag.innerText = newLikes
+    pTag.dataset.likes = newLikes
 
     // send patch request
-    updateToyInDatabase()
+    updateToyInDatabase(toyObj, likesObj)
   }
 }
+
+function updateToyInDatabase(toyObj, likesObj){
+  fetch(`http://localhost:3000/toys/${toyObj.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: "applicatoin/json"
+    },
+    body: JSON.stringify(likesObj)
+    })
+}
+
+
+
+all progress is made outside of the comfort zone
