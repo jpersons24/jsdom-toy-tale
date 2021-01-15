@@ -13,12 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
       toyFormContainer.style.display = "none";
     }
   });
+
   loadToys()
-  // addingToy()
+
 });
 
 
 // **************** GLOBAL SCOPE BEGINS HERE *******************
+
+
+// ******************* render toys from database to DOM **************************
 
 function loadToys() {
   const toysUrl = 'http://localhost:3000/toys'
@@ -34,6 +38,7 @@ const collectionDiv = document.querySelector('#toy-collection')
 function renderToy(toyObj) {
   const toyDiv = document.createElement('div')
   toyDiv.classList.add('card')
+  // toyDiv.dataset.id = toyObj.id
   collectionDiv.append(toyDiv)
 
   const toyName = document.createElement('h2')
@@ -61,7 +66,11 @@ function renderToy(toyObj) {
   // toyDiv.appendChild(likeBtn)
 }
 
+
+// ******************** new toy form submission *********************
+
 const toyForm = document.querySelector('.add-toy-form')
+
 toyForm.addEventListener('submit', handleToyFormSubmit)
 
 function handleToyFormSubmit(event) {
@@ -93,44 +102,30 @@ function handleToyFormSubmit(event) {
 
 
 
-// ******************* like button *******************
+// ******************* like button ******************
 
-const likeButton = document.querySelector('.like-btn')
 
-likeButton.addEventListener('click', function(event){
-  if (event.target.dataset.id === 'likes') {
-    // Update Animal
-    // PATCH /animals/:id
-    // body: { donation: 10 }
-    const button = event.target
-    // traverse the DOM to find elements we care about, relative to the button
-    const card = button.closest(".card")
-    const id = card.dataset.id
-    // traverse the DOM to find elements we care about, relative to the button
-    const likeP = card.querySelector(".toy-likes")
-    // get the donation amount from the DOM
-    const likeCount = parseInt(likeP.textContent)
-     // optimistic rendering!
-     // donationCountSpan.textContent = donationCount + 10 
-    fetch(`http://localhost:3000/toys${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        likes: likeCount + 1
-      }),
-    })
-      .then(response => response.json())
-      .then(updatedToy => {
-        console.log('Success:', updateToy);
-        // update the DOM
-        // pessimistic rendering!
-        likeP.textContent = updatedToy.likes
-      })
-  }
+// listen for even on toy collection div, delegating using the increaseLikes function
+collectionDiv.addEventListener('click', function(event) {
+  increaseLikes(event)
 })
 
 
+function increaseLikes(event) {
+  if (event.target.matches('.like-btn')){
+    // console.log(event.target)
+    // find current like value
+    const pTag = event.target.parentElement.querySelector('p.toy-likes')
+    console.log(pTag)
+    let currLikes = parseInt(pTag.innerText)
 
+    // increase current value by 1
+    let newLikes = currLikes + 1
 
+    // add new value to DOM
+    pTag.innerText = newLikes
+
+    // send patch request
+    updateToyInDatabase()
+  }
+}
