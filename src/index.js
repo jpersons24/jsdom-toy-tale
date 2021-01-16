@@ -38,6 +38,7 @@ const collectionDiv = document.querySelector('#toy-collection')
 function renderToy(toyObj) {
   const toyDiv = document.createElement('div')
   toyDiv.classList.add('card')
+  toyDiv.dataset.toyLikes = toyObj.id
   collectionDiv.append(toyDiv)
 
   const toyName = document.createElement('h2')
@@ -93,7 +94,7 @@ function handleToyFormSubmit(event) {
     .then(response => response.json())
     .then(newToyObj => {
       renderToy(newToyObject)
-      console.log('Success:', newToyObj);
+      console.log('Post request success!', newToyObj);
     })
   .catch((error) => {
     console.error('Error:', error);
@@ -129,11 +130,14 @@ function increaseLikes(event) {
     pTag.dataset.likes = newLikes
 
     // send patch request
-    updateToyInDatabase(event.target.parentElement.id, pTag.dataset.likes)
+    const likesObj = {likes: newLikes}
+    const toyId = pTag.parentElement.dataset.id
+
+    updateToyInDatabase(toyId, likesObj)
   }
 }
 
-function updateToyInDatabase(toyObj, likesObj){
+function updateToyInDatabase(toyObj, likeObj){
 
   fetch(`http://localhost:3000/toys/${toyObj}`, {
     method: 'PATCH',
@@ -141,11 +145,8 @@ function updateToyInDatabase(toyObj, likesObj){
       'Content-Type': 'application/json',
       'Accept': "applicatoin/json"
     },
-    body: JSON.stringify({
-      'likes': likesObj
-    })
+    body: JSON.stringify(likeObj),
   })
-
 }
 
 
