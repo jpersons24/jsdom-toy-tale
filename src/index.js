@@ -108,17 +108,17 @@ function handleToyFormSubmit(event) {
 
 // listen for even on toy collection div, delegating using the increaseLikes function
 collectionDiv.addEventListener('click', function(event) {
+  console.log(event.target)
   increaseLikes(event)
 })
 
 
 function increaseLikes(event) {
-  // console.log(event.target)
+
   if (event.target.matches('.like-btn')){
-    // console.log(event.target)
+  
     // find current like value
     const pTag = event.target.parentElement.querySelector('p.toy-likes')
-    console.log(pTag)
     let currLikes = parseInt(pTag.innerText)
 
     // increase current value by 1
@@ -129,21 +129,24 @@ function increaseLikes(event) {
     pTag.dataset.likes = newLikes
 
     // send patch request
-    updateToyInDatabase(toyObj, likesObj)
+    updateToyInDatabase(event.target.parentElement.id, pTag.dataset.likes)
   }
 }
 
 function updateToyInDatabase(toyObj, likesObj){
-  fetch(`http://localhost:3000/toys/${toyObj.id}`, {
+
+  fetch(`http://localhost:3000/toys/${toyObj}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Accept: "applicatoin/json"
+      'Accept': "applicatoin/json"
     },
-    body: JSON.stringify(likesObj)
+    body: JSON.stringify({
+      'likes': likesObj
     })
+  })
+
 }
 
 
 
-all progress is made outside of the comfort zone
