@@ -38,7 +38,7 @@ const collectionDiv = document.querySelector('#toy-collection')
 function renderToy(toyObj) {
   const toyDiv = document.createElement('div')
   toyDiv.classList.add('card')
-  toyDiv.dataset.toyLikes = toyObj.id
+  toyDiv.dataset.id = toyObj.id
   collectionDiv.append(toyDiv)
 
   const toyName = document.createElement('h2')
@@ -137,15 +137,15 @@ function increaseLikes(event) {
   }
 }
 
-function updateToyInDatabase(toyObj, likeObj){
+function updateToyInDatabase(id, updatedObj){
 
-  fetch(`http://localhost:3000/toys/${toyObj}`, {
+  fetch(`http://localhost:3000/toys/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': "applicatoin/json"
+      'Accept': 'application/json'
     },
-    body: JSON.stringify(likeObj),
+    body: JSON.stringify(updatedObj),
   })
 }
 

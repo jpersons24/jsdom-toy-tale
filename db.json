@@ -18,7 +18,7 @@
       "id": 3,
       "name": "Mr. Potato Head",
       "image": "https://vignette.wikia.nocookie.net/universe-of-smash-bros-lawl/images/d/d8/Mr-potato-head-toy-story.gif/revision/latest?cb=20151129131217",
-      "likes": 3
+      "likes": 6
     },
     {
       "id": 4,
@@ -65,7 +65,7 @@
     {
       "name": "Lenny the Binoculars",
       "image": "https://vignette.wikia.nocookie.net/disney/images/0/08/Lenny_004.jpg/revision/latest/top-crop/width/720/height/900?cb=20140321155325",
-      "likes": 0,
+      "likes": 6,
       "id": 11
     }
   ]
